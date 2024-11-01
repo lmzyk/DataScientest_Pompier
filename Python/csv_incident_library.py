@@ -1,4 +1,4 @@
-import pandas as pd
+import pandas as pd # type: ignore
 
 class CSVHandler:
     def __init__(self, file_path):
