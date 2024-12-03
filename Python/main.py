@@ -22,6 +22,7 @@ print(Fore.CYAN + f'# ----------------------------------------------------------
 print(Fore.CYAN + f'# Exploitation des fichiers incidents via la classe spécifique #' + Style.RESET_ALL)
 print(Fore.CYAN + f'# ------------------------------------------------------------ #' + Style.RESET_ALL)
 print(Fore.CYAN + f'################################################################' + Style.RESET_ALL)
+start_time = datetime.now()  # Enregistrer l'heure de début
 
 # Chemin complet du fichier avec 30% des données
 incidents_sample_filepath = "C:/Users/lukas/Desktop/Git Repo/DataScientest_Pompier/incidents_sample_2020_30_percent.xlsx"
@@ -43,16 +44,23 @@ else:
     if df_incidents is not None:
         print_with_time("Création d'un échantillon de 30% des incidents...")
         sample_df = df_incidents.sample(frac=0.3, random_state=1)
+        # sample_df = sample_df.columns.str.replace('ï»¿', '', regex=False)
         sample_df.to_excel("incidents_sample_2020_30_percent.xlsx", index=False)
         print_with_time("Échantillon de 30% enregistré dans 'incidents_sample_2020_30_percent.xlsx'")
     else:
         print(Fore.RED + "Erreur : Aucun fichier n'a été chargé avec succès." + Style.RESET_ALL)
+
+
+end_time = datetime.now()  # Enregistrer l'heure de fin
+duration = end_time - start_time
+print(Fore.LIGHTMAGENTA_EX + f"Durée d'exécution de la méthode 'IncidentImporter' : {duration}" + Style.RESET_ALL)
 
 print(Fore.CYAN + f'###################################################################' + Style.RESET_ALL)
 print(Fore.CYAN + f'# --------------------------------------------------------------- #' + Style.RESET_ALL)
 print(Fore.CYAN + f'# Exploitation des fichiers mobilization via la classe spécifique #' + Style.RESET_ALL)
 print(Fore.CYAN + f'# --------------------------------------------------------------- #' + Style.RESET_ALL)
 print(Fore.CYAN + f'###################################################################' + Style.RESET_ALL)
+start_time = datetime.now()  # Enregistrer l'heure de début
 
 # Chemin complet du fichier avec les données concaténées de mobilisation
 mobilization_sample_filepath = "C:/Users/lukas/Desktop/Git Repo/DataScientest_Pompier/mobilization_sample_2020.xlsx"
@@ -78,6 +86,10 @@ else:
     df_concat.to_excel(mobilization_sample_filepath, index=False)
     print_with_time("Données de mobilisation concaténées enregistrées dans 'mobilization_sample_2020.xlsx'")
 
+end_time = datetime.now()  # Enregistrer l'heure de fin
+duration = end_time - start_time
+print(Fore.LIGHTMAGENTA_EX + f"Durée d'exécution de la méthode 'MobilizationImporter' : {duration}" + Style.RESET_ALL)
+
 
 print_with_time(f"Vérification du fichier : {linked_mobilization_filepath}")
 
@@ -85,6 +97,7 @@ if os.path.isfile(linked_mobilization_filepath):
     print_with_time("Le fichier de mobilisation linked existe déjà")
 else:
     print_with_time("Fichier avec les données de mobilisation linked non trouvé. Exécution de la concaténation des données.")
+    start_time = datetime.now()  # Enregistrer l'heure de début
 
     if os.path.isfile(mobilization_sample_filepath):
         print_with_time("Le fichier de mobilisation fusionnée existe déjà. Chargement des données...")
@@ -98,6 +111,7 @@ else:
         # Charger le fichier incidents
         try:
             df_incidents_30 = pd.read_excel(incidents_sample_filepath, engine='openpyxl')
+            df_incidents_30.columns = df_incidents_30.columns.str.replace('ï»¿', '', regex=False)
             print_with_time(f"Fichier incidents chargé avec {len(df_incidents_30)} lignes.")
         except Exception as e:
             print_with_time(Fore.RED + f"Erreur lors du chargement du fichier des incidents : {e}" + Style.RESET_ALL)
@@ -123,15 +137,21 @@ else:
                 print_with_time(Fore.RED + "Erreur : le DataFrame filtré est vide, aucune donnée enregistrée." + Style.RESET_ALL)
         except Exception as e:
             print_with_time(Fore.RED + f"Erreur lors de l'enregistrement du fichier : {e}" + Style.RESET_ALL)
+ 
+        end_time = datetime.now()  # Enregistrer l'heure de fin
+        duration = end_time - start_time
+        print(Fore.LIGHTMAGENTA_EX + f"Durée d'exécution de la méthode 'linked_files' : {duration}" + Style.RESET_ALL)
     else:
         print_with_time(Fore.RED + "Fichier de mobilisation fusionnée introuvable !" + Style.RESET_ALL)
+
 
 # Fusion des données incidents et mobilisations
 print(Fore.CYAN + f'#################################################################' + Style.RESET_ALL)
 print(Fore.CYAN + f'# ------------------------------------------------------------- #' + Style.RESET_ALL)
 print(Fore.CYAN + f'#    Data merger permettant la création d un nouveau fichier    #' + Style.RESET_ALL)
 print(Fore.CYAN + f'# ------------------------------------------------------------- #' + Style.RESET_ALL)
-print(Fore.CYAN + f'#################################################################' + Style.RESET_ALL)
+print(Fore.CYAN + f'#################################################################' + Style.RESET_ALL) 
+start_time = datetime.now()  # Enregistrer l'heure de début
 
 merged_sample_filepath = "C:/Users/lukas/Desktop/Git Repo/DataScientest_Pompier/merged_incidents_mobilizations_2020.xlsx"
 
@@ -154,3 +174,8 @@ else:
             print(Fore.RED + f"Erreur lors de l'enregistrement du fichier fusionné : {e}" + Style.RESET_ALL)
     else:
         print(Fore.YELLOW + "Aucune donnée fusionnée à enregistrer." + Style.RESET_ALL)
+
+
+end_time = datetime.now()  # Enregistrer l'heure de fin
+duration = end_time - start_time
+print(Fore.LIGHTMAGENTA_EX + f"Durée d'exécution de la méthode 'mergedFiles' : {duration}" + Style.RESET_ALL)

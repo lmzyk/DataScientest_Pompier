@@ -98,6 +98,10 @@ class DataMerger:
             # Fusion des données sur 'IncidentNumber'
             df_merged = pd.merge(df_incidents, df_mobilizations, on='IncidentNumber', how='left')
 
+            # Mise à jour de la colonne 'DateOfCall' pour extraire seulement la date de 'DateAndTimeMobile'
+            df_merged['DateOfCall'] = df_merged['DateAndTimeMobile'].dt.date
+
+            
             # Vérification après fusion
             if df_merged.empty:
                 raise ValueError("La fusion a échoué : aucun résultat obtenu.")
