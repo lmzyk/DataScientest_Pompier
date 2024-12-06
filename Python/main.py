@@ -4,8 +4,8 @@ from incident_importer import IncidentImporter
 from mobilization_importer import MobilisationImporter
 from data_merge import DataMerger
 from colorama import Fore, Style, init
-from intervention_map import InterventionMap
 from datetime import datetime
+from DataVisualizer import DataVisualizer
 
 # Initialisation de colorama
 init()
@@ -175,6 +175,35 @@ else:
     else:
         print(Fore.YELLOW + "Aucune donnée fusionnée à enregistrer." + Style.RESET_ALL)
 
+
+end_time = datetime.now()  # Enregistrer l'heure de fin
+duration = end_time - start_time
+print(Fore.LIGHTMAGENTA_EX + f"Durée d'exécution de la méthode 'mergedFiles' : {duration}" + Style.RESET_ALL)
+
+print(Fore.CYAN + f'#################################################################' + Style.RESET_ALL)
+print(Fore.CYAN + f'# ------------------------------------------------------------- #' + Style.RESET_ALL)
+print(Fore.CYAN + f'#                   Génération des graphiques                   #' + Style.RESET_ALL)
+print(Fore.CYAN + f'# ------------------------------------------------------------- #' + Style.RESET_ALL)
+print(Fore.CYAN + f'#################################################################' + Style.RESET_ALL)
+start_time = datetime.now()  # Enregistrer l'heure de début
+
+input_filepath = "C:/Users/lukas/Desktop/Git Repo/DataScientest_Pompier/merged_incidents_mobilizations.xlsx"
+visualizer = DataVisualizer(input_filepath)
+
+# 1. Evolution du temps de réponse moyen par an
+visualizer.plot_mean_attendance_per_year()
+# 2. Evolution du nombre d'incidents traités par an et par type
+visualizer.plot_incident_counts_per_group()
+# 3. Top 5 des casernes avec le plus d'interventions par type d'incident
+visualizer.plot_top_5_stations()
+# 4. Top 5 des casernes avec le moins d'interventions par type d'incident
+visualizer.plot_least_5_stations()
+# 5. Temps de réponse en fonction de la nature de l'incident
+visualizer.plot_response_time_by_incident_type()
+# 6. Affichage des valeurs uniques dans 'StopCodeDescription' et leur nombre d'occurrences
+visualizer.print_stop_code_description_counts()
+# 7. Affichage de la heatmap des corrélations entre les variables
+visualizer.plot_heatmap()
 
 end_time = datetime.now()  # Enregistrer l'heure de fin
 duration = end_time - start_time

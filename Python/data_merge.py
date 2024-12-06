@@ -41,6 +41,8 @@ class DataMerger:
         df_incidents['TimeOfCall'] = pd.to_datetime(df_incidents['TimeOfCall'], format='%H:%M:%S', errors='coerce').dt.time
         
         # Mise à jour de la colonne 'DateOfCall' dans les incidents
+        df_incidents['CallYear'] = pd.to_datetime(df_incidents['DateOfCall'], errors='coerce').dt.year
+        df_mobilizations['CallYear'] = df_mobilizations['DateAndTimeMobile'].dt.year
         df_incidents['DateOfCall'] = df_mobilizations['DateAndTimeMobile'].dt.date
 
         print(Fore.GREEN + "Prétraitement des données effectué avec succès." + Style.RESET_ALL)
@@ -82,8 +84,8 @@ class DataMerger:
                 raise ValueError("Le fichier des mobilisations est vide ou n'a pas été chargé correctement.")
             
             # Vérification des colonnes de base
-            print(f"Colonnes des incidents : {df_incidents.columns.tolist()}")
-            print(f"Colonnes des mobilisations : {df_mobilizations.columns.tolist()}")
+            # print(f"Colonnes des incidents : {df_incidents.columns.tolist()}")
+            # print(f"Colonnes des mobilisations : {df_mobilizations.columns.tolist()}")
             
             # Prétraitement des données
             df_incidents, df_mobilizations = self.preprocess_data(df_incidents, df_mobilizations)
@@ -101,6 +103,9 @@ class DataMerger:
             # Mise à jour de la colonne 'DateOfCall' pour extraire seulement la date de 'DateAndTimeMobile'
             df_merged['DateOfCall'] = df_merged['DateAndTimeMobile'].dt.date
 
+            if 'CalYear_x' in df_merged.columns:
+                df_merged['CallYear'] = df_merged['CalYear_x']
+                df_merged.drop(['CalYear_x', 'CalYear_y'], axis=1, inplace=True)
             
             # Vérification après fusion
             if df_merged.empty:
